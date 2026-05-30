@@ -34,6 +34,7 @@ jobs:
           New-Item -ItemType Directory -Force public | Out-Null
           Copy-Item board.html public/index.html
           Copy-Item board.html public/board.html
+          Copy-Item index.html public/editorial.html
           Copy-Item app.js, styles.css -Destination public
           Copy-Item assets public/assets -Recurse
           Copy-Item data public/data -Recurse
