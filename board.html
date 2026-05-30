@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drug Board | News Board</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon-b.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260530-board-filters">
+</head>
+<body data-page="board">
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <main class="app-shell">
+    <header class="masthead">
+      <div class="masthead-primary">
+        <div class="brand-lockup">
+          <div class="brand-mark">
+            <img src="assets/logo-b.svg" alt="Drug Board logo">
+          </div>
+          <div>
+            <p class="eyebrow">Curated biotech briefing</p>
+            <p class="brand-name">Drug Board</p>
+          </div>
+        </div>
+      </div>
+      <div class="masthead-note">A clean public board for scanning ranked drug discovery news and going straight to the original source.</div>
+    </header>
+
+    <section class="panel board-panel">
+      <div class="panel-heading board-heading">
+        <div>
+          <p class="section-label">Public board</p>
+          <h2>Drug discovery news portal</h2>
+          <p class="board-intro">
+            A portal-style board that groups stories by source, with each source board using its own time frame and linking directly to the original articles.
+          </p>
+        </div>
+
+        <div class="controls">
+          <label class="control">
+            <span>Source type</span>
+            <select id="source-filter">
+              <option value="all">All source types</option>
+            </select>
+          </label>
+          <label class="control">
+            <span>Update window</span>
+            <select id="update-window">
+              <option value="all">All dates</option>
+              <option value="1">Yesterday only</option>
+              <option value="3">Past 3 days</option>
+              <option value="7">Past 7 days</option>
+              <option value="30" selected>Past 30 days</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="portal-shell">
+        <section class="portal-sources">
+          <div class="portal-section-head">
+            <p class="section-label">Source boards</p>
+            <h3>Source tabs with boards listed below</h3>
+          </div>
+          <div class="portal-tabs" id="portal-tabs"></div>
+          <div class="portal-tab-panels" id="portal-tab-panels"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel summary-panel">
+      <div class="hero-metrics" id="hero-metrics">
+        <article>
+          <span class="metric-label">Tracked sources</span>
+          <strong id="source-count">0</strong>
+        </article>
+        <article>
+          <span class="metric-label">Stories on board</span>
+          <strong id="story-count">0</strong>
+        </article>
+        <article>
+          <span class="metric-label">Highest score</span>
+          <strong id="top-score">0</strong>
+        </article>
+      </div>
+      <div class="update-status-bar">
+        <div class="update-status-copy">
+          <span id="last-updated-label">Last live update: not available yet</span>
+          <span id="update-item-count"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <template id="portal-source-tab-template">
+    <button class="portal-tab-button" type="button"></button>
+  </template>
+
+  <template id="portal-source-panel-template">
+    <article class="portal-source-panel">
+      <div class="portal-source-board-head">
+        <div>
+          <p class="section-label portal-source-type"></p>
+          <h3 class="portal-source-name"></h3>
+        </div>
+        <span class="portal-window-badge"></span>
+      </div>
+      <ul class="portal-story-list"></ul>
+      <div class="portal-board-footer">
+        <a class="source-link portal-board-link" target="_blank" rel="noreferrer">Visit source</a>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js?v=20260530-window-badges" defer></script>
+</body>
+</html>

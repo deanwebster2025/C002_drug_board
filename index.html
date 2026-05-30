@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drug Board</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon-b.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="workspace">
+  <div class="background-orb orb-a"></div>
+  <div class="background-orb orb-b"></div>
+
+  <main class="app-shell">
+    <header class="masthead">
+      <div class="masthead-primary">
+        <div class="brand-lockup">
+          <div class="brand-mark">
+            <img src="assets/logo-b.svg" alt="Drug Board logo">
+          </div>
+          <div>
+            <p class="eyebrow">Curated biotech briefing</p>
+            <p class="brand-name">Drug Board</p>
+          </div>
+        </div>
+        <nav class="page-switcher" aria-label="Page switcher">
+          <a class="page-link active" href="index.html">Editorial desk</a>
+          <a class="page-link" href="board.html">News board</a>
+        </nav>
+      </div>
+      <div class="masthead-note">Daily signal for drug discovery, translational science, and biotech strategy.</div>
+    </header>
+
+    <section class="panel board-panel workspace-board-panel">
+      <div class="panel-heading board-heading">
+        <div>
+          <p class="section-label">Drug discovery intelligence</p>
+          <h2>Editorial source board</h2>
+          <p class="board-intro">
+            The same board-style source layout as the public page, with the full editorial tools still attached to every story.
+          </p>
+        </div>
+
+        <div class="controls">
+          <label class="control">
+            <span>Topic</span>
+            <select id="topic-filter">
+              <option value="all">All topics</option>
+            </select>
+          </label>
+          <label class="control">
+            <span>Source type</span>
+            <select id="source-filter">
+              <option value="all">All source types</option>
+            </select>
+          </label>
+          <label class="control">
+            <span>Sort</span>
+            <select id="sort-order">
+              <option value="score">Highest score</option>
+              <option value="date" selected>Newest first</option>
+            </select>
+          </label>
+          <label class="control">
+            <span>Update window</span>
+            <select id="update-window">
+              <option value="all">All dates</option>
+              <option value="1">Yesterday only</option>
+              <option value="3">Past 3 days</option>
+              <option value="7">Past 7 days</option>
+              <option value="30" selected>Past 30 days</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="portal-shell workspace-portal-shell">
+        <section class="portal-sources workspace-portal-sources">
+          <div class="portal-section-head">
+            <p class="section-label">Source boards</p>
+            <h3>Source tabs with editable boards listed below</h3>
+          </div>
+          <div class="portal-tabs" id="portal-tabs"></div>
+          <div class="portal-tab-panels workspace-tab-panels" id="portal-tab-panels"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel summary-panel">
+      <div class="hero-metrics" id="hero-metrics">
+        <article>
+          <span class="metric-label">Tracked sources</span>
+          <strong id="source-count">0</strong>
+        </article>
+        <article>
+          <span class="metric-label">Stories on board</span>
+          <strong id="story-count">0</strong>
+        </article>
+        <article>
+          <span class="metric-label">Highest score</span>
+          <strong id="top-score">0</strong>
+        </article>
+      </div>
+      <div class="update-status-bar">
+        <div class="update-status-copy">
+          <span id="last-updated-label">Last live update: not available yet</span>
+          <span id="update-item-count"></span>
+        </div>
+        <div class="update-status-actions">
+          <button class="primary-button update-now-button" id="update-now-button" type="button">Update now</button>
+          <span class="platform-status update-now-status" id="update-now-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel annotation-panel">
+      <div class="panel-heading annotation-heading">
+        <div>
+          <p class="section-label">Annotation tool</p>
+          <h2>Highlight terms and build a learning glossary</h2>
+          <p class="board-intro">
+            Select words inside a news card, highlight them, and the tool will list those terms under the story with simple explanations and IPA pronunciation.
+          </p>
+        </div>
+      </div>
+
+      <div class="studio-layout">
+        <section class="studio-card">
+          <div class="studio-card-heading">
+            <div>
+              <p class="section-label">Selection</p>
+              <h3>Highlight directly inside each news card</h3>
+            </div>
+          </div>
+
+          <div class="selection-toolbar">
+            <button class="action-button ghost-button" id="clear-highlights" type="button">Clear all highlights</button>
+            <span class="selection-status" id="selection-status">0 highlighted terms</span>
+          </div>
+
+          <div class="annotation-instructions">
+            <p>How to use:</p>
+            <p>1. Read a news card.</p>
+            <p>2. Select a word or short phrase inside that card.</p>
+            <p>3. Click the `Highlight selected text` button on that same card.</p>
+            <p>4. The highlighted term will appear below that news item with a simple explanation and IPA.</p>
+          </div>
+        </section>
+
+        <section class="studio-card outputs-card">
+          <div class="output-tabs">
+            <button class="tab-button active" data-target="facebook-output" type="button">Facebook</button>
+            <button class="tab-button" data-target="x-output" type="button">X</button>
+            <button class="tab-button" data-target="wechat-output" type="button">WeChat</button>
+          </div>
+
+          <div class="output-panel active" id="facebook-output">
+            <div class="output-header">
+              <div>
+                <p class="section-label">Ready to publish</p>
+                <h3>Facebook post set</h3>
+              </div>
+              <div class="output-actions">
+                <button class="action-button" id="copy-facebook" type="button">Copy</button>
+                <button class="primary-button send-button" id="send-facebook" type="button">Send to Facebook</button>
+              </div>
+            </div>
+            <textarea id="facebook-text" class="output-text" readonly></textarea>
+          </div>
+
+          <div class="output-panel" id="x-output">
+            <div class="output-header">
+              <div>
+                <p class="section-label">Ready to publish</p>
+                <h3>X thread set</h3>
+              </div>
+              <div class="output-actions">
+                <button class="action-button" id="copy-x" type="button">Copy</button>
+                <button class="primary-button send-button" id="send-x" type="button">Send to X</button>
+              </div>
+            </div>
+            <textarea id="x-text" class="output-text" readonly></textarea>
+          </div>
+
+          <div class="output-panel" id="wechat-output">
+            <div class="output-header">
+              <div>
+                <p class="section-label">Ready to publish</p>
+                <h3>WeChat bilingual set</h3>
+              </div>
+              <div class="output-actions">
+                <button class="action-button" id="copy-wechat" type="button">Copy</button>
+                <button class="primary-button send-button" id="send-wechat" type="button">Send to WeChat</button>
+              </div>
+            </div>
+            <textarea id="wechat-text" class="output-text" readonly></textarea>
+          </div>
+
+          <p class="platform-status" id="platform-status"></p>
+          <p class="platform-note">
+            The tool keeps original source links in every publishing format. WeChat output is bilingual and places the Chinese version immediately after each English news item.
+          </p>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel lower-info-panel">
+      <div class="info-grid">
+        <section class="sidebar-card">
+          <p class="section-label">Coverage map</p>
+          <h3>Trusted source universe</h3>
+          <div id="source-list" class="source-list"></div>
+          <div class="source-manager">
+            <label class="control source-input-control">
+              <span>Add source URL</span>
+              <input id="source-url-input" type="url" placeholder="https://example.com/news">
+            </label>
+            <button class="primary-button" id="add-source-button" type="button">Add source</button>
+            <p class="platform-status" id="source-status"></p>
+          </div>
+        </section>
+
+        <section class="sidebar-card">
+          <p class="section-label">Methodology</p>
+          <h3>How stories are prioritized</h3>
+          <div id="ranking-rules" class="ranking-rules"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <template id="news-card-template">
+    <article class="news-card">
+      <div class="news-topline">
+        <div>
+          <p class="news-meta"></p>
+          <h3 class="news-headline"></h3>
+        </div>
+        <div class="score-pill"></div>
+      </div>
+      <div class="selectable-copy" tabindex="0">
+        <p class="news-summary news-headline-copy"></p>
+        <p class="news-summary news-summary-copy"></p>
+      </div>
+      <div class="tag-row"></div>
+      <div class="card-actions">
+        <button class="action-button inline-highlight-button" type="button">Highlight selected text</button>
+        <button class="action-button publish-toggle-button" type="button">Add to publish list</button>
+        <button class="action-button archive-toggle-button" type="button">Archive news</button>
+      </div>
+      <div class="glossary-block">
+        <p class="glossary-title">Highlighted terms</p>
+        <div class="glossary-list"></div>
+      </div>
+      <div class="news-footer">
+        <span class="score-breakdown"></span>
+        <a class="source-link" target="_blank" rel="noreferrer">Read source</a>
+      </div>
+    </article>
+  </template>
+
+  <template id="portal-source-tab-template">
+    <button class="portal-tab-button" type="button"></button>
+  </template>
+
+  <template id="workspace-source-panel-template">
+    <article class="portal-source-panel workspace-source-panel">
+      <div class="portal-source-board-head">
+        <div>
+          <p class="section-label portal-source-type"></p>
+          <h3 class="portal-source-name"></h3>
+        </div>
+        <span class="portal-window-badge"></span>
+      </div>
+      <div class="workspace-source-stories"></div>
+      <div class="portal-board-footer">
+        <a class="source-link portal-board-link" target="_blank" rel="noreferrer">Visit source</a>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js?v=20260530-window-badges" defer></script>
+</body>
+</html>

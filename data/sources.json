@@ -1,0 +1,348 @@
+[
+  {
+    "id": "fda",
+    "name": "FDA Newsroom",
+    "type": "Regulator",
+    "trustScore": 10,
+    "url": "https://www.fda.gov/news-events/fda-newsroom",
+    "notes": "Best for approvals, regulatory actions, safety updates, and official product milestones."
+  },
+  {
+    "id": "nih",
+    "name": "NIH News Releases",
+    "type": "Research",
+    "trustScore": 9,
+    "url": "https://www.nih.gov/news-events/news-releases",
+    "notes": "Strong upstream signal for translational science, funded breakthroughs, and trial readouts."
+  },
+  {
+    "id": "clinicaltrials",
+    "name": "ClinicalTrials.gov",
+    "type": "Clinical trials",
+    "trustScore": 9,
+    "url": "https://clinicaltrials.gov/",
+    "notes": "Primary source for trial status changes, endpoints, and study design details."
+  },
+  {
+    "id": "pubmed",
+    "name": "PubMed",
+    "type": "Journals",
+    "trustScore": 8,
+    "url": "https://pubmed.ncbi.nlm.nih.gov/",
+    "notes": "Primary literature layer for discovery papers and preclinical or clinical publications."
+  },
+  {
+    "id": "nature-biotech",
+    "name": "Nature Biotechnology",
+    "type": "Journals",
+    "trustScore": 8,
+    "url": "https://www.nature.com/nbt/",
+    "notes": "High-value journal source for platform innovation, modalities, and translational work."
+  },
+  {
+    "id": "nature-medicine",
+    "name": "Nature Medicine",
+    "type": "Journals",
+    "trustScore": 8,
+    "url": "https://www.nature.com/nm/",
+    "notes": "Useful for translational and clinical medicine developments with strong scientific signal."
+  },
+  {
+    "id": "nejm",
+    "name": "NEJM",
+    "type": "Journals",
+    "trustScore": 8,
+    "url": "https://www.nejm.org/",
+    "notes": "Strong source for clinical practice-changing studies and trial publications."
+  },
+  {
+    "id": "ema",
+    "name": "EMA News",
+    "type": "Regulator",
+    "trustScore": 9,
+    "url": "https://www.ema.europa.eu/en/news",
+    "notes": "European regulatory updates, approvals, safety reviews, and committee decisions."
+  },
+  {
+    "id": "nci",
+    "name": "NCI News & Events",
+    "type": "Research",
+    "trustScore": 9,
+    "url": "https://www.cancer.gov/news-events",
+    "notes": "National Cancer Institute updates with a strong signal for cancer research, clinical developments, and official press releases.",
+    "updaterReady": true,
+    "updaterMode": "nci-html"
+  },
+  {
+    "id": "stat",
+    "name": "STAT Biotech",
+    "type": "Industry media",
+    "trustScore": 7,
+    "url": "https://www.statnews.com/topic/biotech/",
+    "notes": "Useful for context on biotech strategy, financing, leadership, and sector reactions."
+  },
+  {
+    "id": "astrazeneca",
+    "name": "AstraZeneca Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.astrazeneca.com/media-centre/press-releases.html",
+    "notes": "Company press releases covering approvals, trial results, pipeline milestones, and corporate updates.",
+    "updaterReady": true,
+    "updaterMode": "astrazeneca-json"
+  },
+  {
+    "id": "merck-co",
+    "name": "Merck & Co. Media",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.merck.com/media/news/",
+    "notes": "Official Merck & Co. media and news releases page for pipeline, regulatory, research, and corporate updates.",
+    "updaterReady": true,
+    "updaterMode": "merck-wp-json"
+  },
+  {
+    "id": "pfizer",
+    "name": "Pfizer Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.pfizer.com/newsroom/press-releases",
+    "notes": "Official Pfizer press releases page for approvals, trial updates, pipeline milestones, and corporate announcements.",
+    "updaterReady": true,
+    "updaterMode": "pfizer-html"
+  },
+  {
+    "id": "jnj",
+    "name": "Johnson & Johnson Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.jnj.com/media-center/press-releases",
+    "notes": "Official Johnson & Johnson press releases page for pharmaceutical, medtech, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "abbvie",
+    "name": "AbbVie Newsroom",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://news.abbvie.com/",
+    "notes": "Official AbbVie newsroom for pipeline, regulatory, research, and corporate updates.",
+    "updaterReady": true,
+    "updaterMode": "abbvie-html"
+  },
+  {
+    "id": "roche",
+    "name": "Roche Media Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.roche.com/media/releases",
+    "notes": "Company media releases covering approvals, trial results, pipeline milestones, and corporate updates.",
+    "updaterReady": true,
+    "updaterMode": "roche-storyblok"
+  },
+  {
+    "id": "novartis",
+    "name": "Novartis Media Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.novartis.com/news/media-releases",
+    "notes": "Official Novartis media releases page for approvals, pipeline updates, research, and corporate announcements.",
+    "updaterReady": true,
+    "updaterMode": "novartis-html"
+  },
+  {
+    "id": "bms",
+    "name": "Bristol Myers Squibb News",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://news.bms.com/",
+    "notes": "Official Bristol Myers Squibb news page for pipeline, regulatory, scientific, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "eli-lilly",
+    "name": "Eli Lilly News Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://investor.lilly.com/news-releases",
+    "notes": "Official Eli Lilly news releases page for trial results, approvals, pipeline milestones, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "sanofi",
+    "name": "Sanofi Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.sanofi.com/en/media-room/press-releases",
+    "notes": "Official Sanofi press releases page for pipeline, vaccines, regulatory, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "novo-nordisk",
+    "name": "Novo Nordisk News and IR Materials",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.novonordisk.com/news-and-media/news-and-ir-materials.html",
+    "notes": "Official Novo Nordisk news and investor materials page for obesity, diabetes, regulatory, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "gsk",
+    "name": "GSK Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.gsk.com/en-gb/media/press-releases/",
+    "notes": "Official GSK press releases page for vaccines, specialty medicines, trials, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "amgen",
+    "name": "Amgen Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.amgen.com/newsroom/press-releases",
+    "notes": "Official Amgen press releases page for pipeline, trial, regulatory, and corporate updates.",
+    "updaterReady": true,
+    "updaterMode": "amgen-json"
+  },
+  {
+    "id": "gilead",
+    "name": "Gilead Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.gilead.com/news-and-press/press-room/press-releases",
+    "notes": "Official Gilead press releases page for virology, oncology, cell therapy, and corporate updates.",
+    "updaterReady": true,
+    "updaterMode": "gilead-search"
+  },
+  {
+    "id": "bayer",
+    "name": "Bayer Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.bayer.com/en/newsroom/press-releases",
+    "notes": "Official Bayer press releases page for pharmaceuticals, crop science, consumer health, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "vertex",
+    "name": "Vertex Newsroom",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://news.vrtx.com/",
+    "notes": "Official Vertex newsroom for cystic fibrosis, pain, gene editing, pipeline, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "biogen",
+    "name": "Biogen News Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://investors.biogen.com/news-releases",
+    "notes": "Official Biogen news releases page for neuroscience, rare disease, pipeline, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "merck-kgaa",
+    "name": "Merck KGaA News",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.emdgroup.com/en/news.html",
+    "notes": "Official Merck KGaA news page for healthcare, life science, electronics, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "chugai",
+    "name": "Chugai Pharmaceutical News",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.chugai-pharm.co.jp/english/news/",
+    "notes": "Official Chugai Pharmaceutical news page for R&D, oncology, regulatory, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "abbott",
+    "name": "Abbott MediaRoom",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://abbott.mediaroom.com/",
+    "notes": "Official Abbott media room for diagnostics, medical devices, nutrition, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "sino-biopharm",
+    "name": "Sino Biopharmaceutical Press Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.sinobiopharm.com/en/media/press-releases",
+    "notes": "Official Sino Biopharmaceutical press releases page for pipeline, regulatory, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "shanghai-pharma",
+    "name": "Shanghai Pharmaceutical News",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://www.sphchina.com/en/news",
+    "notes": "Official Shanghai Pharmaceutical news page for manufacturing, products, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "moderna",
+    "name": "Moderna News Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://news.modernatx.com/",
+    "notes": "Official Moderna news releases page for mRNA platform, vaccines, trials, and corporate updates.",
+    "updaterReady": true,
+    "updaterMode": "moderna-rss"
+  },
+  {
+    "id": "biontech",
+    "name": "BioNTech News Releases",
+    "type": "Company",
+    "trustScore": 7,
+    "url": "https://investors.biontech.de/news-releases/news-release-details/",
+    "notes": "Official BioNTech news releases page for oncology, infectious disease, pipeline, and corporate updates.",
+    "updaterReady": false,
+    "updaterMode": "manual"
+  },
+  {
+    "id": "fierce-biotech",
+    "name": "Fierce Biotech",
+    "type": "Industry media",
+    "trustScore": 7,
+    "url": "https://www.fiercebiotech.com/",
+    "notes": "Sector news for pipelines, partnerships, trial outcomes, and company updates."
+  },
+  {
+    "id": "biopharma-dive",
+    "name": "BioPharma Dive",
+    "type": "Industry media",
+    "trustScore": 7,
+    "url": "https://www.biopharmadive.com/",
+    "notes": "Industry reporting with useful summaries of biotech and pharma developments."
+  },
+  {
+    "id": "drugs",
+    "name": "Drugs.com News Feeds",
+    "type": "Aggregator",
+    "trustScore": 6,
+    "url": "https://www.drugs.com/rss.html",
+    "notes": "Convenient aggregation layer for approvals, applications, alerts, and trial result headlines."
+  }
+]
