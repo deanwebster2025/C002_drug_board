@@ -1,4 +1,4 @@
-const STORAGE_KEYS = {
+﻿const STORAGE_KEYS = {
   annotations: "drug-board-annotations",
   publishSelectedIds: "drug-board-publish-selected-ids",
   archivedIds: "drug-board-archived-ids",
@@ -20,6 +20,78 @@ const termDictionary = {
     simple: "Artificial intelligence, meaning computer systems that can assist with pattern finding, prediction, or decision support.",
     simpleZh: "人工智能，指可以帮助进行模式识别、预测或决策支持的计算机系统。"
   },
+  prostate: {
+    ipa: "/ˈprɑː.steɪt/",
+    pronunciation: "PRAH-stayt",
+    simple: "A gland in the male reproductive system that can be affected by prostate cancer.",
+    simpleZh: "前列腺，男性生殖系统中的腺体，也是前列腺癌发生的部位。"
+  },
+  pitch: {
+    ipa: "/pɪtʃ/",
+    pronunciation: "pitch",
+    simple: "A persuasive argument or proposal made to support an approval, deal, or decision.",
+    simpleZh: "游说或论证，指为推动批准、交易或决策而提出的说服性理由。"
+  },
+  strike: {
+    ipa: "/straɪk/",
+    pronunciation: "strike",
+    simple: "To make or reach a deal, agreement, or partnership.",
+    simpleZh: "达成，常用于表示达成交易、协议或合作。"
+  },
+  chaotic: {
+    ipa: "/keɪˈɑː.tɪk/",
+    pronunciation: "kay-AH-tik",
+    simple: "Unstable, disordered, or difficult to predict.",
+    simpleZh: "混乱的、不稳定的，指局势缺乏秩序且难以预测。"
+  },
+  kappa: {
+    ipa: "/ˈkæp.ə/",
+    pronunciation: "KAP-uh",
+    simple: "A type of light chain in antibodies; relevant in certain plasma-cell and amyloidosis diseases.",
+    simpleZh: "κ轻链，抗体轻链的一种；在部分浆细胞疾病和淀粉样变性中具有临床意义。"
+  },
+  innovation: {
+    ipa: "/ˌɪn.əˈveɪ.ʃən/",
+    pronunciation: "in-uh-VAY-shun",
+    simple: "A new idea, technology, product, or development approach that changes what is possible.",
+    simpleZh: "创新，指新的理念、技术、产品或开发方式，能够带来新的可能性。"
+  },
+  scraps: {
+    ipa: "/skræps/",
+    pronunciation: "skraps",
+    simple: "Stops, cancels, or abandons a project, program, or plan.",
+    simpleZh: "取消或放弃，指停止推进某个项目、计划或药物开发。"
+  },
+  unveils: {
+    ipa: "/ʌnˈveɪlz/",
+    pronunciation: "un-VAYLZ",
+    simple: "Reveals, discloses, or presents new data, plans, or products publicly.",
+    simpleZh: "公布或披露，指公开发布新的数据、计划或产品信息。"
+  },
+  newco: {
+    ipa: "/ˈnjuː.koʊ/",
+    pronunciation: "NEW-co",
+    simple: "A newly formed company, often created for a specific program, asset, or business strategy.",
+    simpleZh: "新成立的公司，通常围绕特定项目、资产或商业策略设立。"
+  },
+  guidance: {
+    ipa: "/ˈɡaɪ.dəns/",
+    pronunciation: "GYE-dance",
+    simple: "The act or process of guiding; in regulation, an official document that explains an agency's current thinking.",
+    simpleZh: "指导；在监管语境中，通常指说明监管机构当前想法和建议做法的官方指南文件。"
+  },
+  tobacco: {
+    ipa: "/təˈbæk.oʊ/",
+    pronunciation: "tuh-BAK-oh",
+    simple: "Any plant of the genus Nicotiana; tobacco leaves contain nicotine and are used in smoking or related products.",
+    simpleZh: "烟草，指烟草属植物；其叶片含有尼古丁，常用于吸烟或相关产品。"
+  },
+  hepatitis: {
+    ipa: "/ˌhep.əˈtaɪ.tɪs/",
+    pronunciation: "hep-uh-TY-tis",
+    simple: "Inflammation of the liver, sometimes caused by a viral infection.",
+    simpleZh: "肝炎，指肝脏发生炎症，有时由病毒感染引起。"
+  },
   "glp-1": {
     ipa: "/ˌdʒiː ˌel ˈpiː wʌn/",
     pronunciation: "jee el pee one",
@@ -38,6 +110,12 @@ const termDictionary = {
     simple: "A gene-editing technology that can cut or modify DNA with high precision.",
     simpleZh: "一种可以高精度切割或修改 DNA 的基因编辑技术。"
   },
+  diagnostics: {
+    ipa: "/ˌdaɪ.əɡˈnɑː.stɪks/",
+    pronunciation: "dye-ug-NAH-stiks",
+    simple: "Tests, tools, or processes used to identify a disease or medical condition.",
+    simpleZh: "诊断，指用于识别疾病或医学状况的检测、工具或流程。"
+  },
   delivery: {
     ipa: "/dɪˈlɪvəri/",
     pronunciation: "dih-LIV-uh-ree",
@@ -55,6 +133,12 @@ const termDictionary = {
     pronunciation: "kay-rass",
     simple: "A cancer-related gene that has long been difficult to drug and remains an important oncology target.",
     simpleZh: "一个与癌症相关的基因，长期以来较难成药，但仍然是重要的肿瘤学靶点。"
+  },
+  acquire: {
+    ipa: "/əˈkwaɪr/",
+    pronunciation: "uh-KWY-er",
+    simple: "To get or buy something; in business, to purchase another company or asset.",
+    simpleZh: "获得或购买；在商业语境中，通常指收购另一家公司或资产。"
   },
   approval: {
     ipa: "/əˈpruːvəl/",
@@ -125,6 +209,7 @@ const termDictionary = {
 };
 
 const chineseDefinitionFallbacks = {
+  "The act or process of guiding.": "指导或引导的行为或过程；在监管语境中，也常指官方指南。",
   "The act or state of expecting or looking forward to an event as about to happen.": "指对某件即将发生的事情抱有期待、预想或心理预期的状态。",
   "Ability to produce a desired effect under ideal testing conditions.": "指在理想测试条件下产生预期效果的能力，常用来描述药物或治疗方案的疗效。",
   "A strong desire; yearning.": "指一种强烈的想要得到某物或实现某事的欲望。",
@@ -136,6 +221,151 @@ const chineseDefinitionFallbacks = {
   "A relatively long, wide and thin piece of any material, usually wood or similar, often for use in construction or furniture-making.": "指一种较长、较宽且较薄的材料片，通常是木板或类似材料，常用于建筑或家具制作。"
 };
 
+const pendingChineseValue = "Chinese translation pending.";
+const zhMonthNames = {
+  January: "1月",
+  February: "2月",
+  March: "3月",
+  April: "4月",
+  May: "5月",
+  June: "6月",
+  July: "7月",
+  August: "8月",
+  September: "9月",
+  October: "10月",
+  November: "11月",
+  December: "12月"
+};
+
+const chineseNewsTranslations = {
+  "TALZENNA Plus XTANDI Improves Radiographic Progression-Free Survival by More Than 50% in Metastatic Prostate Cancer": "TALZENNA联合XTANDI使转移性前列腺癌患者的影像学无进展生存期改善超过50%。",
+  "Official Pfizer press release on pipeline, regulatory, research, or corporate developments.": "",
+  "AstraZeneca, after phase 3 miss, posts subgroup data behind pitch for rare disease approval": "阿斯利康III期研究失利后，公布支持罕见病适应症获批主张的亚组数据。",
+  "AstraZeneca has shared data it believes can rescue anselamimab from a phase 3 failure, linking the rare disease drug candidate to a 62% improvement in survival in a prespecified subgroup.": "阿斯利康公布了一组其认为可挽回anselamimab III期失败影响的数据；在预设亚组中，这款罕见病候选药物与生存改善62%相关。",
+  "Pfizer, Innovent strike $10B cancer drug deal": "辉瑞与信达生物达成总额100亿美元的癌症药物合作交易。",
+  "Involving up to 12 antibody drugs, the alliance is the latest broad partnership between Chinese biotech and a multinational pharmaceutical company.": "这项合作最多涉及12款抗体药物，是中国生物技术公司与跨国制药企业之间最新的一项大型合作。",
+  "Can a chaotic FDA still deliver on faster drug development?": "处于动荡中的FDA还能推动更快的药物开发吗？",
+  "As leadership changes create more instability at the FDA, here’s what one former agency official thinks it will take to keep speedier drug approvals on track.": "随着领导层变动让FDA更加不稳定，一位前机构官员认为，要让更快的药物审批保持正轨，需要满足若干条件。",
+  "As leadership changes create more instability at the FDA, hereâ€™s what one former agency official thinks it will take to keep speedier drug approvals on track.": "随着领导层变动让FDA更加不稳定，一位前机构官员认为，要让更快的药物审批保持正轨，需要满足若干条件。",
+  "CARES Phase III clinical programme did not meet primary endpoint in overall light chain amyloidosis population, however, demonstrated anselamimab as potential first anti-fibril therapy in kappa light chain amyloidosis": "CARES III期临床项目未在整体轻链淀粉样变性人群中达到主要终点，但显示anselamimab有望成为κ轻链淀粉样变性的首个抗纤维疗法。",
+  "AstraZeneca press release covering oncology, oncology, corporate press release.": "",
+  "Pfizer pens $10B, 12-drug deal with Innovent in broad bet on Chinese cancer med innovation": "辉瑞与信达生物签署100亿美元、覆盖12款药物的合作协议，押注中国癌症药物创新。",
+  "Pfizer is paying Innovent $650 million upfront to partner on cancer drug development, following Bristol Myers Squibb by striking a broad pact that positions it to leverage China’s fast early development system.": "辉瑞将向信达生物支付6.5亿美元首付款，合作开发癌症药物；继百时美施贵宝之后，辉瑞也通过大型合作来利用中国快速的早期研发体系。",
+  "Pfizer is paying Innovent $650 million upfront to partner on cancer drug development, following Bristol Myers Squibb by striking a broad pact that positions it to leverage Chinaâ€™s fast early development system.": "辉瑞将向信达生物支付6.5亿美元首付款，合作开发癌症药物；继百时美施贵宝之后，辉瑞也通过大型合作来利用中国快速的早期研发体系。",
+  "Gilead scraps lead arthritis drug from $405M MiroBio buyout in latest blow to BTLA agonist field": "吉利德放弃其4.05亿美元收购MiroBio所得的主要关节炎药物，BTLA激动剂领域再遭打击。",
+  "Gilead has abandoned work on the lead rheumatoid arthritis drug from its $405 million buyout of MiroBio in the latest blow to the BTLA agonist field.": "吉利德已停止推进其4.05亿美元收购MiroBio所得的主要类风湿关节炎药物，这是BTLA激动剂领域遭遇的最新挫折。",
+  "Bristol Myers unveils data for one of its next-gen blood cancer drugs": "百时美施贵宝公布其一款下一代血液癌症药物的数据。",
+  "Called mezigdomide, the drug is one of two protein-degrading medicines Bristol Myers hopes to soon position as successors to its lucrative Revlimid franchise.": "这款名为mezigdomide的药物是百时美施贵宝两款蛋白降解药物之一，公司希望它们未来接替高收入产品Revlimid。",
+  "FDA Issues Draft Guidance to Cut Unnecessary Animal Testing for Cancer Drugs": "FDA发布指南草案，拟减少癌症药物开发中不必要的动物试验。",
+  "GSK, Ionis unveil data for hepatitis B drug touted as ‘functional cure’": "GSK和Ionis公布被称为有望实现“功能性治愈”的乙肝药物数据。",
+  "GSK, Ionis unveil data for hepatitis B drug touted as â€˜functional cureâ€™": "GSK和Ionis公布被称为有望实现“功能性治愈”的乙肝药物数据。",
+  "The findings supporting bepirovirsen were deemed a “historic moment” by physicians and validate a drug that has “clear blockbuster potential,” according to one analyst.": "支持bepirovirsen的研究结果被医生称为“历史性时刻”；一位分析师认为，这些数据验证了该药物“明确的重磅潜力”。",
+  "The findings supporting bepirovirsen were deemed a â€œhistoric momentâ€ by physicians and validate a drug that has â€œclear blockbuster potential,â€ according to one analyst.": "支持bepirovirsen的研究结果被医生称为“历史性时刻”；一位分析师认为，这些数据验证了该药物“明确的重磅潜力”。",
+  "Human Longevity launches newco, teams with Insilico for AI-powered longevity research": "Human Longevity成立新公司，并与Insilico合作开展AI驱动的长寿研究。",
+  "Human Longevity, which is seeking to use biology and genomics to boost the human lifespan, has launched a new company called Human Life Foundation Models (HLFM) to help with its goal.": "Human Longevity希望利用生物学和基因组学延长人类寿命，并已成立名为Human Life Foundation Models（HLFM）的新公司来推进这一目标。",
+  "CVS obesity drug deal puts Lilly on equal footing with Novo": "CVS肥胖药物协议让礼来与诺和诺德处于同等竞争位置。",
+  "The agreement includes Lilly’s new pill Foundayo and restores coverage for Zepbound, erasing what had been a commercial edge for rival Novo Nordisk.": "该协议包括礼来的新口服药Foundayo，并恢复Zepbound的覆盖范围，从而消除了竞争对手诺和诺德此前拥有的商业优势。",
+  "The agreement includes Lillyâ€™s new pill Foundayo andÂ restores coverage for Zepbound, erasing what had been a commercial edge for rival Novo Nordisk.Â ": "该协议包括礼来的新口服药Foundayo，并恢复Zepbound的覆盖范围，从而消除了竞争对手诺和诺德此前拥有的商业优势。",
+  "FDA Approves First Treatment for Chronic Hepatitis Delta Virus (HDV) Infection": "FDA批准首款慢性丁型肝炎病毒（HDV）感染治疗药物。",
+  "FDA Warns Retailers Selling Illegal Tobacco Products That Look Like Everyday Products": "FDA警告零售商，不要销售外观类似日常用品的非法烟草产品。",
+  "Roche enters into a definitive merger agreement to acquire PathAI to transform AI-driven diagnostics": "罗氏签署最终合并协议，将收购PathAI，以推动AI驱动诊断转型。",
+  "PathAI’s best-in-class Image Management System (IMS) with advanced AI analysis and workflow capabilities will complement Roche's digital pathology portfolio to drive laboratory efficiencyCombining...": "PathAI领先的图像管理系统（IMS）具备先进的AI分析和工作流能力，将补充罗氏的数字病理产品组合，帮助提升实验室效率。",
+  "PathAI’s best-in-class Image Management System (IMS) with advanced AI analysis and workflow capabilities will complement Roche's digital pathology portfolio to drive laboratory efficiency Combining...": "PathAI领先的图像管理系统（IMS）具备先进的AI分析和工作流能力，将补充罗氏的数字病理产品组合，帮助提升实验室效率。"
+};
+
+const chineseNewsPhraseMap = [
+  ["FDA", "FDA"],
+  ["Issues", "发布"],
+  ["Draft Guidance", "指南草案"],
+  ["Guidance", "指南"],
+  ["Cancer Drugs", "癌症药物"],
+  ["Cancer", "癌症"],
+  ["Drugs", "药物"],
+  ["Drug", "药物"],
+  ["Unnecessary Animal Testing", "不必要的动物试验"],
+  ["Animal Testing", "动物试验"],
+  ["Testing", "试验"],
+  ["Official", "官方"],
+  ["press announcement", "新闻公告"],
+  ["published", "发布"],
+  ["approval", "批准"],
+  ["approves", "批准"],
+  ["therapy", "疗法"],
+  ["treatment", "治疗"],
+  ["clinical trial", "临床试验"],
+  ["clinical", "临床"],
+  ["oncology", "肿瘤学"],
+  ["biotech", "生物技术"],
+  ["phase", "期"],
+  ["data", "数据"],
+  ["patients", "患者"],
+  ["disease", "疾病"],
+  ["study", "研究"],
+  ["announces", "宣布"],
+  ["results", "结果"],
+  ["new", "新的"]
+];
+
+function hasUsableChineseText(value) {
+  return Boolean(value && value !== pendingChineseValue && !String(value).includes("待补充"));
+}
+
+function getDrugBoardUrl() {
+  return new URL("board.html", window.location.href).href;
+}
+
+function getDrugBoardStoryUrl(story) {
+  const storyId = encodeURIComponent(story.id);
+  return new URL(`board.html#${storyId}`, window.location.href).href;
+}
+
+function normalizeTranslationLookupText(text) {
+  return String(text || "")
+    .replace(/\s+/g, " ")
+    .replace(/efficiencyCombining/g, "efficiency Combining")
+    .trim();
+}
+
+function translateKnownDateSummary(text) {
+  const match = String(text).match(/^Official FDA press announcement published on ([A-Za-z]+) (\d{1,2}), (\d{4})\.$/);
+  if (!match) {
+    return "";
+  }
+
+  const [, monthName, day, year] = match;
+  const month = zhMonthNames[monthName] ?? monthName;
+  return `FDA于${year}年${month}${Number(day)}日发布的官方新闻公告。`;
+}
+
+function draftChineseNewsText(text) {
+  if (!text || text === pendingChineseValue) {
+    return "";
+  }
+
+  const normalized = normalizeTranslationLookupText(text);
+  const known = chineseNewsTranslations[text] || chineseNewsTranslations[normalized];
+  if (known) {
+    return known;
+  }
+
+  const dateSummary = translateKnownDateSummary(normalized);
+  if (dateSummary) {
+    return dateSummary;
+  }
+
+  return "中文翻译待补充。";
+}
+
+function isBoilerplateSummary(value) {
+  const text = String(value || "");
+  return text.startsWith("Official ") && text.includes(" press announcement published on ");
+}
+
+function getChineseNewsLines(story) {
+  const headlineZh = hasUsableChineseText(story.headlineZh) ? story.headlineZh : draftChineseNewsText(story.headline);
+  const summaryZh = isBoilerplateSummary(story.summary) ? "" : (hasUsableChineseText(story.summaryZh) ? story.summaryZh : draftChineseNewsText(story.summary));
+  return [headlineZh, summaryZh].filter(Boolean);
+}
 const termCache = new Map();
 
 const defaultSources = [
@@ -474,8 +704,44 @@ function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function hasUsableChineseExplanation(value) {
+  return Boolean(value && !String(value).includes("待补充"));
+}
+
+function hydrateAnnotation(item) {
+  const key = normalizeTerm(item.term || "").toLowerCase();
+  const local = termDictionary[key];
+
+  if (!local) {
+    return item;
+  }
+
+  return {
+    ...item,
+    ipa: item.ipa && item.ipa !== "/custom term/" ? item.ipa : local.ipa,
+    pronunciation: item.pronunciation || local.pronunciation,
+    simple: item.simple || local.simple,
+    simpleZh: hasUsableChineseExplanation(item.simpleZh) ? item.simpleZh : local.simpleZh,
+    audio: item.audio || local.audio || ""
+  };
+}
+
+function findAutoGlossaryItems(story) {
+  const text = `${story.headline || ""} ${story.summary || ""}`;
+  return Object.entries(termDictionary)
+    .filter(([term]) => term.length > 2 && new RegExp(`\\b${escapeRegex(term)}\\b`, "i").test(text))
+    .slice(0, 2)
+    .map(([term, local]) => hydrateAnnotation({
+      term,
+      ipa: local.ipa,
+      pronunciation: local.pronunciation,
+      simple: local.simple,
+      simpleZh: local.simpleZh,
+      audio: local.audio || ""
+    }));
+}
 function getStoryAnnotations(storyId) {
-  return state.annotations[storyId] ?? [];
+  return (state.annotations[storyId] ?? []).map(hydrateAnnotation);
 }
 
 function decorateHighlights(text, storyId) {
@@ -847,6 +1113,7 @@ function renderBoardPortal(items) {
     const list = panelFragment.querySelector(".portal-story-list");
     stories.forEach(story => {
       const item = document.createElement("li");
+      item.id = story.id;
       item.className = "portal-story-item";
       item.innerHTML = `
         <span class="portal-story-date">${escapeHtml(formatDate(story.date))}</span>
@@ -878,16 +1145,17 @@ function buildNewsCard(item) {
   const headlineCopy = fragment.querySelector(".news-headline-copy");
   const summaryCopy = fragment.querySelector(".news-summary-copy");
   const highlightButton = fragment.querySelector(".inline-highlight-button");
-  const publishToggleButton = fragment.querySelector(".publish-toggle-button");
+  const clearCardHighlightButton = fragment.querySelector(".clear-card-highlight-button");
   const archiveToggleButton = fragment.querySelector(".archive-toggle-button");
 
+  card.id = item.id;
   card.dataset.storyId = item.id;
   selectable.dataset.storyId = item.id;
 
   fragment.querySelector(".news-meta").textContent = pageMode === "board"
     ? formatDate(item.date)
     : `${formatDate(item.date)} | ${item.source.name}`;
-  fragment.querySelector(".news-headline").textContent = item.headline;
+  fragment.querySelector(".news-headline").innerHTML = decorateHighlights(item.headline, item.id);
   headlineCopy.innerHTML = decorateHighlights(item.headline, item.id);
   summaryCopy.innerHTML = decorateHighlights(item.summary, item.id);
   fragment.querySelector(".score-pill").textContent = item.score;
@@ -908,10 +1176,8 @@ function buildNewsCard(item) {
     ? item.source.name
     : `Read source at ${item.source.name}`;
 
-  highlightButton.addEventListener("click", () => addHighlightForStory(item.id, selectable));
-  publishToggleButton.textContent = state.publishSelectedIds.has(item.id) ? "Selected for publish" : "Add to publish list";
-  publishToggleButton.classList.toggle("active", state.publishSelectedIds.has(item.id));
-  publishToggleButton.addEventListener("click", () => togglePublishSelection(item.id));
+  highlightButton.addEventListener("click", () => addHighlightForStory(item.id, card));
+  clearCardHighlightButton.addEventListener("click", () => clearHighlightForStory(item.id));
 
   archiveToggleButton.textContent = "Archive news";
   archiveToggleButton.classList.toggle("active", false);
@@ -1015,6 +1281,7 @@ function renderGlossary(container, storyId) {
   items.forEach(item => {
     const entry = document.createElement("article");
     entry.className = "glossary-item";
+    const chineseExplanation = item.simpleZh || "中文解释待补充。";
     entry.innerHTML = `
       <div class="glossary-term-row">
         <strong>${escapeHtml(item.term)}</strong>
@@ -1024,7 +1291,8 @@ function renderGlossary(container, storyId) {
         <span class="glossary-pronunciation">Pronunciation: ${escapeHtml(item.pronunciation)}</span>
         <button class="action-button speak-button" type="button">Speak</button>
       </div>
-      <p>${escapeHtml(item.simple)}</p>
+      <p><strong>Simple explanation:</strong> ${escapeHtml(item.simple)}</p>
+      <p><strong>中文解释:</strong> ${escapeHtml(chineseExplanation)}</p>
     `;
     entry.querySelector(".speak-button").addEventListener("click", () => speakTerm(item));
     container.appendChild(entry);
@@ -1057,7 +1325,7 @@ function updateSelectionStatus() {
   element.textContent = `${count} highlighted term${count === 1 ? "" : "s"}`;
 }
 
-async function addHighlightForStory(storyId, selectableElement) {
+async function addHighlightForStory(storyId, cardElement) {
   const selection = window.getSelection();
   const selectedText = normalizeTerm(selection?.toString() ?? "");
 
@@ -1066,10 +1334,13 @@ async function addHighlightForStory(storyId, selectableElement) {
   }
 
   const anchorNode = selection.anchorNode;
-  const element = anchorNode?.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode;
-  const selectedContainer = element?.closest(".selectable-copy");
+  const focusNode = selection.focusNode;
+  const anchorElement = anchorNode?.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode;
+  const focusElement = focusNode?.nodeType === Node.TEXT_NODE ? focusNode.parentElement : focusNode;
+  const anchorCard = anchorElement?.closest(".news-card");
+  const focusCard = focusElement?.closest(".news-card");
 
-  if (!selectedContainer || selectedContainer !== selectableElement) {
+  if (!anchorCard || anchorCard !== cardElement || focusCard !== cardElement) {
     return;
   }
 
@@ -1078,13 +1349,20 @@ async function addHighlightForStory(storyId, selectableElement) {
 
   if (!existing.some(item => item.term.toLowerCase() === entry.term.toLowerCase())) {
     state.annotations[storyId] = [...existing, entry];
-    saveState();
   }
 
+  state.publishSelectedIds.add(storyId);
+  saveState();
   selection.removeAllRanges();
   render();
 }
 
+function clearHighlightForStory(storyId) {
+  delete state.annotations[storyId];
+  state.publishSelectedIds.delete(storyId);
+  saveState();
+  render();
+}
 function clearHighlights() {
   state.annotations = {};
   saveState();
@@ -1126,15 +1404,17 @@ function buildHighlightLine(story) {
 }
 
 function buildFacebookOutput(items) {
-  return items.map((story, index) => {
+  const boardUrl = new URL("board.html", window.location.href).href;
+  const storyBlocks = items.map((story, index) => {
     const highlightLine = buildHighlightLine(story);
     return [
       `${index + 1}. ${story.headline}`,
-      story.summary,
-      highlightLine,
-      `Source: ${story.url}`
+      isBoilerplateSummary(story.summary) ? "" : story.summary,
+      highlightLine
     ].filter(Boolean).join("\n");
-  }).join("\n\n");
+  });
+
+  return [`Drug Board link: ${boardUrl}`, ...storyBlocks].filter(Boolean).join("\n\n");
 }
 
 function buildXOutput(items) {
@@ -1142,29 +1422,35 @@ function buildXOutput(items) {
     const highlightLine = buildHighlightLine(story);
     return [
       `Post ${index + 1}/${items.length}`,
+      `Drug Board link: ${getDrugBoardStoryUrl(story)}`,
       story.headline,
-      highlightLine,
-      `Source: ${story.url}`
+      highlightLine
     ].filter(Boolean).join("\n");
   }).join("\n\n");
 }
 
 function buildWeChatOutput(items) {
-  return items.map((story, index) => {
-    const annotations = getStoryAnnotations(story.id);
-    const glossaryBlock = annotations.map(item => `- ${item.term}\n  Simple explanation: ${item.simple}`).join("\n");
-    const glossaryBlockZh = annotations.map(item => `- ${item.term}\n  中文解释: ${item.simpleZh ?? "中文解释待补充。"}`).join("\n");
+  const boardUrl = new URL("board.html", window.location.href).href;
+  const storyBlocks = items.map((story, index) => {
+    const savedAnnotations = getStoryAnnotations(story.id);
+    const annotations = savedAnnotations.length ? savedAnnotations : findAutoGlossaryItems(story);
+    const englishGlossaryBlock = annotations.map(item => `- ${item.term}\n  Simple explanation: ${item.simple}`).join("\n");
+    const chineseGlossaryBlock = annotations.map(item => `- ${item.term}\n  中文解释: ${item.simpleZh || "中文解释待补充。"}`).join("\n");
+    const englishNewsLines = [story.headline];
+    if (!isBoilerplateSummary(story.summary)) {
+      englishNewsLines.push(story.summary);
+    }
+    const chineseNewsLines = getChineseNewsLines(story);
 
     return [
-      `${index + 1}. ${story.headline}`,
-      story.summary,
-      story.headlineZh,
-      story.summaryZh,
-      glossaryBlock ? `Highlighted terms:\n${glossaryBlock}` : "",
-      glossaryBlockZh ? `高亮词汇：\n${glossaryBlockZh}` : "",
-      `Source link: ${story.url}`
+      `${index + 1}. ${englishNewsLines.filter(Boolean).join("\n")}`,
+      chineseNewsLines.join("\n"),
+      englishGlossaryBlock ? `Highlighted terms :\n${englishGlossaryBlock}` : "",
+      chineseGlossaryBlock ? `高亮词汇：\n${chineseGlossaryBlock}` : ""
     ].filter(Boolean).join("\n");
-  }).join("\n\n");
+  });
+
+  return [`Drug Board link: ${boardUrl}`, ...storyBlocks].filter(Boolean).join("\n\n");
 }
 
 function generatePublishingOutputs() {
@@ -1250,26 +1536,6 @@ async function triggerManualUpdate() {
   }
 }
 
-async function sendToFacebook() {
-  await copyOutput("facebook-text");
-  window.open("https://www.facebook.com/", "_blank", "noopener");
-  setPlatformStatus("Facebook content copied. Facebook opened in a new tab.");
-}
-
-function sendToX() {
-  const text = document.getElementById("x-text").value;
-  if (!text) {
-    return;
-  }
-  window.open(`https://x.com/intent/post?text=${encodeURIComponent(text)}`, "_blank", "noopener");
-  setPlatformStatus("X composer opened with your content.");
-}
-
-async function sendToWeChat() {
-  await copyOutput("wechat-text");
-  window.open("https://mp.weixin.qq.com/", "_blank", "noopener");
-  setPlatformStatus("WeChat content copied. WeChat opened in a new tab.");
-}
 
 function setSourceStatus(message) {
   const element = document.getElementById("source-status");
@@ -1365,9 +1631,6 @@ function wireInterface() {
   document.getElementById("copy-facebook")?.addEventListener("click", () => copyOutput("facebook-text"));
   document.getElementById("copy-x")?.addEventListener("click", () => copyOutput("x-text"));
   document.getElementById("copy-wechat")?.addEventListener("click", () => copyOutput("wechat-text"));
-  document.getElementById("send-facebook")?.addEventListener("click", sendToFacebook);
-  document.getElementById("send-x")?.addEventListener("click", sendToX);
-  document.getElementById("send-wechat")?.addEventListener("click", sendToWeChat);
   document.getElementById("add-source-button")?.addEventListener("click", addSourceFromInput);
   document.getElementById("update-now-button")?.addEventListener("click", triggerManualUpdate);
   if (pageMode === "workspace") {

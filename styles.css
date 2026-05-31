@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #d8d8d8;
   --bg-alt: #eeeeee;
   --ink: #161616;
@@ -1218,4 +1218,19 @@ body {
   .update-now-status {
     text-align: left;
   }
+}
+
+.board-contact {
+  color: var(--muted-text);
+  font-size: 0.95rem;
+}
+
+.board-contact a {
+  color: var(--accent-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.board-contact a:hover {
+  text-decoration: underline;
 }

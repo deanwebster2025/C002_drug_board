@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -122,7 +122,7 @@
           <p class="section-label">Annotation tool</p>
           <h2>Highlight terms and build a learning glossary</h2>
           <p class="board-intro">
-            Select words inside a news card, highlight them, and the tool will list those terms under the story with simple explanations and IPA pronunciation.
+            Select words inside a news card, highlight them, and the tool will list those terms under the story with English and Chinese explanations plus IPA pronunciation.
           </p>
         </div>
       </div>
@@ -145,8 +145,8 @@
             <p>How to use:</p>
             <p>1. Read a news card.</p>
             <p>2. Select a word or short phrase inside that card.</p>
-            <p>3. Click the `Highlight selected text` button on that same card.</p>
-            <p>4. The highlighted term will appear below that news item with a simple explanation and IPA.</p>
+            <p>3. Click the `Highlight selected` button on that same card.</p>
+            <p>4. The highlighted term will appear below that news item with English and Chinese explanations plus IPA.</p>
           </div>
         </section>
 
@@ -165,7 +165,6 @@
               </div>
               <div class="output-actions">
                 <button class="action-button" id="copy-facebook" type="button">Copy</button>
-                <button class="primary-button send-button" id="send-facebook" type="button">Send to Facebook</button>
               </div>
             </div>
             <textarea id="facebook-text" class="output-text" readonly></textarea>
@@ -179,7 +178,6 @@
               </div>
               <div class="output-actions">
                 <button class="action-button" id="copy-x" type="button">Copy</button>
-                <button class="primary-button send-button" id="send-x" type="button">Send to X</button>
               </div>
             </div>
             <textarea id="x-text" class="output-text" readonly></textarea>
@@ -193,7 +191,6 @@
               </div>
               <div class="output-actions">
                 <button class="action-button" id="copy-wechat" type="button">Copy</button>
-                <button class="primary-button send-button" id="send-wechat" type="button">Send to WeChat</button>
               </div>
             </div>
             <textarea id="wechat-text" class="output-text" readonly></textarea>
@@ -201,7 +198,7 @@
 
           <p class="platform-status" id="platform-status"></p>
           <p class="platform-note">
-            The tool keeps original source links in every publishing format. WeChat output is bilingual and places the Chinese version immediately after each English news item.
+            WeChat output starts with one Drug Board link, then each English news item followed by its Chinese version, highlighted terms, and 高亮词汇。
           </p>
         </section>
       </div>
@@ -247,8 +244,8 @@
       </div>
       <div class="tag-row"></div>
       <div class="card-actions">
-        <button class="action-button inline-highlight-button" type="button">Highlight selected text</button>
-        <button class="action-button publish-toggle-button" type="button">Add to publish list</button>
+        <button class="action-button inline-highlight-button" type="button">Highlight selected</button>
+        <button class="action-button clear-card-highlight-button" type="button">Clear highlight</button>
         <button class="action-button archive-toggle-button" type="button">Archive news</button>
       </div>
       <div class="glossary-block">
@@ -282,6 +279,6 @@
     </article>
   </template>
 
-  <script src="app.js?v=20260530-window-badges" defer></script>
+  <script src="app.js?v=20260531-cn-translation-curated" defer></script>
 </body>
 </html>
