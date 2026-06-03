@@ -443,6 +443,45 @@ body {
   gap: 0.7rem;
 }
 
+
+.journal-source-panel .portal-window-badge {
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.journal-group-list {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.journal-group {
+  border-top: 1px solid rgba(28, 48, 77, 0.1);
+  padding-top: 0.9rem;
+}
+
+.journal-group:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.journal-group-head h4 {
+  margin: 0.15rem 0 0;
+  font-size: 1.04rem;
+  letter-spacing: -0.01em;
+}
+
+.journal-group-footer {
+  margin-top: 0.65rem;
+}
+
+.journal-story-status {
+  border-top: 1px solid rgba(28, 48, 77, 0.1);
+  color: var(--muted);
+  font-size: 0.94rem;
+  list-style: none;
+  padding-top: 0.7rem;
+}
 .workspace-tab-panels {
   display: grid;
   gap: 1rem;
@@ -514,7 +553,23 @@ body[data-page="workspace"] .workspace-source-panel:nth-child(4n + 4) {
   padding-top: 0.8rem;
   border-top: 1px solid rgba(28, 48, 77, 0.1);
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.portal-back-top-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font: 600 0.95rem/1 "Space Grotesk", sans-serif;
+  padding: 0;
+}
+
+.portal-back-top-button:hover {
+  text-decoration: underline;
 }
 
 .strategy-grid article,

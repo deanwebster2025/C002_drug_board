@@ -474,7 +474,9 @@ const state = {
   archivedIds: new Set(),
   customSources: [],
   updateMeta: null,
-  isUpdatingNow: false
+  isUpdatingNow: false,
+  journalArticleGroups: [],
+  journalArticlesLoading: false
 };
 
 const pageMode = document.body.dataset.page || "workspace";
@@ -502,7 +504,40 @@ const sourceBoardConfig = {
   gilead: { days: 30, limit: 12 },
   moderna: { days: 30, limit: 12 }
 };
-
+const journalBoardConfig = [
+  { rank: 1, name: "Nature Reviews Drug Discovery", issn: "1474-1784", impact: 101.8, url: "https://www.nature.com/nrd/" },
+  { rank: 2, name: "Nature Medicine", issn: "1546-170X", impact: 50.0, url: "https://www.nature.com/nm/" },
+  { rank: 3, name: "Nature", issn: "1476-4687", impact: 48.5, url: "https://www.nature.com/nature/" },
+  { rank: 4, name: "Science", issn: "1095-9203", impact: 45.8, url: "https://www.science.org/journal/science" },
+  { rank: 5, name: "Cancer Cell", issn: "1535-6108", impact: 44.5, url: "https://www.cell.com/cancer-cell/home" },
+  { rank: 6, name: "Cell", issn: "1097-4172", impact: 42.5, url: "https://www.cell.com/cell/home" },
+  { rank: 7, name: "Nature Biotechnology", issn: "1546-1696", impact: 41.7, url: "https://www.nature.com/nbt/" },
+  { rank: 8, name: "Cancer Discovery", issn: "2159-8290", impact: 33.3, url: "https://aacrjournals.org/cancerdiscovery" },
+  { rank: 9, name: "Nature Methods", issn: "1548-7105", impact: 32.1, url: "https://www.nature.com/nmeth/" },
+  { rank: 10, name: "Nature Cancer", issn: "2662-1347", impact: 28.5, url: "https://www.nature.com/natcancer/" },
+  { rank: 11, name: "Nature Immunology", issn: "1529-2916", impact: 27.6, url: "https://www.nature.com/ni/" },
+  { rank: 12, name: "Nature Biomedical Engineering", issn: "2157-846X", impact: 26.6, url: "https://www.nature.com/natbiomedeng/" },
+  { rank: 13, name: "Immunity", issn: "1074-7613", impact: 26.3, url: "https://www.cell.com/immunity/home" },
+  { rank: 14, name: "Nature Machine Intelligence", issn: "2522-5839", impact: 23.9, url: "https://www.nature.com/natmachintell/" },
+  { rank: 15, name: "Trends in Pharmacological Sciences", issn: "0165-6147", impact: 19.9, url: "https://www.cell.com/trends/pharmacological-sciences/home" },
+  { rank: 16, name: "Nature Computational Science", issn: "2662-8457", impact: 18.3, url: "https://www.nature.com/natcomputsci/" },
+  { rank: 20, name: "Science Translational Medicine", issn: "1946-6242", impact: 14.6, url: "https://www.science.org/journal/stm" },
+  { rank: 21, name: "Nature Chemical Biology", issn: "1552-4469", impact: 13.7, url: "https://www.nature.com/nchembio/" },
+  { rank: 22, name: "Briefings in Bioinformatics", issn: "1477-4054", impact: 7.7, url: "https://academic.oup.com/bib" },
+  { rank: 23, name: "Cell Systems", issn: "2405-4712", impact: 7.7, url: "https://www.cell.com/cell-systems/home" },
+  { rank: 24, name: "Drug Discovery Today", issn: "1359-6446", impact: 7.5, url: "https://www.sciencedirect.com/journal/drug-discovery-today" },
+  { rank: 27, name: "Cell Chemical Biology", issn: "2451-9456", impact: 7.2, url: "https://www.cell.com/cell-chemical-biology/home" },
+  { rank: 28, name: "Journal of Medicinal Chemistry", issn: "1520-4804", impact: 6.8, url: "https://pubs.acs.org/journal/jmcmar" },
+  { rank: 29, name: "European Journal of Medicinal Chemistry", issn: "0223-5234", impact: 5.9, url: "https://www.sciencedirect.com/journal/european-journal-of-medicinal-chemistry" },
+  { rank: 30, name: "Digital Discovery", issn: "2635-098X", impact: 5.6, url: "https://www.rsc.org/journals-books-databases/about-journals/digital-discovery/" },
+  { rank: 31, name: "Clinical Pharmacology & Therapeutics", issn: "1532-6535", impact: 5.5, url: "https://ascpt.onlinelibrary.wiley.com/journal/15326535" },
+  { rank: 32, name: "Bioinformatics", issn: "1367-4811", impact: 5.4, url: "https://academic.oup.com/bioinformatics" },
+  { rank: 33, name: "Journal of Chemical Information and Modeling", issn: "1549-960X", impact: 5.3, url: "https://pubs.acs.org/journal/jcisd8" },
+  { rank: 34, name: "Molecular Pharmaceutics", issn: "1543-8392", impact: 4.5, url: "https://pubs.acs.org/journal/mpohbp" },
+  { rank: 35, name: "Pharmaceutical Research", issn: "1573-904X", impact: 4.3, url: "https://link.springer.com/journal/11095" },
+  { rank: 36, name: "ACS Medicinal Chemistry Letters", issn: "1948-5875", impact: 4.0, url: "https://pubs.acs.org/journal/amclct" },
+  { rank: 37, name: "Drug Metabolism and Disposition", issn: "1521-009X", impact: 4.0, url: "https://dmd.aspetjournals.org/" }
+];
 function readStoredJson(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -1070,6 +1105,177 @@ function sortSourceGroups(a, b) {
   return a.source.name.localeCompare(b.source.name, undefined, { sensitivity: "base" });
 }
 
+function getCrossrefDate(work) {
+  const dateParts = work?.published?.["date-parts"]?.[0]
+    ?? work?.["published-print"]?.["date-parts"]?.[0]
+    ?? work?.["published-online"]?.["date-parts"]?.[0]
+    ?? work?.issued?.["date-parts"]?.[0];
+
+  if (!dateParts?.length) {
+    return "";
+  }
+
+  const [year, month = 1, day = 1] = dateParts;
+  return new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10);
+}
+
+function getCrossrefTitle(work) {
+  const title = Array.isArray(work?.title) ? work.title[0] : work?.title;
+  return title ? title.replace(/\s+/g, " ").trim() : "Untitled article";
+}
+
+function getCrossrefContainer(work) {
+  const container = Array.isArray(work?.["container-title"]) ? work["container-title"][0] : work?.["container-title"];
+  return container ? container.replace(/\s+/g, " ").trim() : "";
+}
+
+function journalContainerMatches(work, journalName) {
+  const container = getCrossrefContainer(work).toLowerCase();
+  return container && container === journalName.toLowerCase();
+}
+
+async function fetchJournalArticles(journal) {
+  const endpoint = new URL("https://api.crossref.org/works");
+  const fromDate = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+  endpoint.searchParams.set("filter", `issn:${journal.issn},type:journal-article,from-pub-date:${fromDate}`);
+  endpoint.searchParams.set("sort", "published");
+  endpoint.searchParams.set("order", "desc");
+  endpoint.searchParams.set("rows", "6");
+  endpoint.searchParams.set("mailto", "deanwebster2025@gmail.com");
+
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 9000);
+
+  try {
+    const response = await fetch(endpoint, { signal: controller.signal });
+    if (!response.ok) {
+      throw new Error(`Crossref returned ${response.status}`);
+    }
+
+    const data = await response.json();
+    const works = data?.message?.items ?? [];
+    const exactMatches = works.filter(work => journalContainerMatches(work, journal.name));
+    const selectedWorks = exactMatches.length ? exactMatches : works;
+
+    return selectedWorks.slice(0, 5).map(work => ({
+      title: getCrossrefTitle(work),
+      date: getCrossrefDate(work),
+      url: work.URL || (work.DOI ? `https://doi.org/${work.DOI}` : journal.url),
+      container: getCrossrefContainer(work)
+    }));
+  } finally {
+    window.clearTimeout(timeout);
+  }
+}
+
+function renderJournalBoard() {
+  const tabs = document.getElementById("portal-tabs");
+  const panels = document.getElementById("portal-tab-panels");
+  const tabTemplate = document.getElementById("portal-source-tab-template");
+
+  if (!tabs || !panels || !tabTemplate) {
+    return;
+  }
+
+  tabs.querySelector('[data-target="journal-panel"]')?.remove();
+  panels.querySelector("#journal-panel")?.remove();
+
+  const groups = state.journalArticleGroups.length
+    ? state.journalArticleGroups
+    : journalBoardConfig.map(journal => ({ journal, articles: [], status: state.journalArticlesLoading ? "loading" : "idle" }));
+
+  const tabFragment = tabTemplate.content.cloneNode(true);
+  const tabButton = tabFragment.querySelector(".portal-tab-button");
+  tabButton.textContent = "Journal articles";
+  tabButton.dataset.target = "journal-panel";
+
+  const panel = document.createElement("article");
+  panel.className = "portal-source-panel journal-source-panel journal-board-panel";
+  panel.id = "journal-panel";
+
+  const groupMarkup = groups.map(group => {
+    const listItems = group.articles.map(article => `
+      <li class="portal-story-item journal-story-item">
+        <span class="portal-story-date">${escapeHtml(article.date ? formatDate(article.date) : "Latest")}</span>
+        <a class="portal-story-link" href="${escapeHtml(article.url)}" target="_blank" rel="noreferrer">${escapeHtml(article.title)}</a>
+      </li>
+    `).join("");
+
+    const statusText = group.status === "loading"
+      ? "Loading latest articles..."
+      : group.status === "error"
+        ? "Unable to load latest articles right now."
+        : "No articles returned from the past 30 days.";
+
+    return `
+      <section class="journal-group">
+        <div class="portal-source-board-head journal-group-head">
+          <div>
+            <p class="section-label">Rank ${group.journal.rank}</p>
+            <h4>${escapeHtml(group.journal.name)}</h4>
+          </div>
+          <span class="portal-window-badge">IF ${group.journal.impact.toFixed(1)}</span>
+        </div>
+        <ul class="portal-story-list journal-story-list">
+          ${listItems || `<li class="journal-story-status">${escapeHtml(statusText)}</li>`}
+        </ul>
+        <div class="journal-group-footer">
+          <a class="source-link portal-board-link" href="${escapeHtml(group.journal.url)}" target="_blank" rel="noreferrer">Visit journal</a>
+        </div>
+      </section>
+    `;
+  }).join("");
+
+  panel.innerHTML = `
+    <div class="portal-source-board-head">
+      <div>
+        <p class="section-label">Journal articles</p>
+        <h3>Past 30 days in ranked journal order</h3>
+      </div>
+      <span class="portal-window-badge">${groups.length} journals</span>
+    </div>
+    <div class="journal-group-list">
+      ${groupMarkup}
+    </div>
+    <div class="portal-board-footer">
+      <a class="source-link portal-board-link" href="https://www.crossref.org/" target="_blank" rel="noreferrer">Article metadata</a>
+      <button class="portal-back-top-button" type="button">Back to top</button>
+    </div>
+  `;
+
+  panel.querySelector(".portal-back-top-button")?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  tabButton.addEventListener("click", () => {
+    tabs.querySelectorAll(".portal-tab-button").forEach(button => button.classList.remove("active"));
+    tabButton.classList.add("active");
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  tabs.appendChild(tabFragment);
+  panels.appendChild(panel);
+}
+async function loadJournalArticles() {
+  const container = document.getElementById("portal-tab-panels");
+  if (!container || state.journalArticlesLoading || state.journalArticleGroups.length) {
+    return;
+  }
+
+  state.journalArticlesLoading = true;
+  state.journalArticleGroups = journalBoardConfig.map(journal => ({ journal, articles: [], status: "loading" }));
+  renderJournalBoard();
+
+  const groups = await Promise.all(journalBoardConfig.map(async journal => {
+    try {
+      const articles = await fetchJournalArticles(journal);
+      return { journal, articles, status: articles.length ? "ready" : "empty" };
+    } catch {
+      return { journal, articles: [], status: "error" };
+    }
+  }));
+
+  state.journalArticleGroups = groups.sort((a, b) => a.journal.rank - b.journal.rank);
+  state.journalArticlesLoading = false;
+  renderJournalBoard();
+}
 function renderBoardPortal(items) {
   const tabs = document.getElementById("portal-tabs");
   const panels = document.getElementById("portal-tab-panels");
@@ -1125,6 +1331,9 @@ function renderBoardPortal(items) {
     const boardLink = panelFragment.querySelector(".portal-board-link");
     boardLink.href = source.url;
     boardLink.textContent = `Visit ${source.name}`;
+
+    const backTopButton = panelFragment.querySelector(".portal-back-top-button");
+    backTopButton?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
     tabButton.addEventListener("click", () => {
       tabs.querySelectorAll(".portal-tab-button").forEach(button => button.classList.remove("active"));
@@ -1242,6 +1451,9 @@ function renderWorkspacePortal(items) {
     const boardLink = panelFragment.querySelector(".portal-board-link");
     boardLink.href = source.url;
     boardLink.textContent = `Visit ${source.name}`;
+
+    const backTopButton = panelFragment.querySelector(".portal-back-top-button");
+    backTopButton?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
     tabButton.addEventListener("click", () => {
       tabs.querySelectorAll(".portal-tab-button").forEach(button => button.classList.remove("active"));
@@ -1655,11 +1867,13 @@ function render() {
   if (pageMode === "board") {
     rebuildFilterOptions(state.news, state.sources);
     renderBoardPortal(items);
+    renderJournalBoard();
     return;
   }
 
   rebuildFilterOptions(state.news, state.sources);
   renderWorkspacePortal(items);
+  renderJournalBoard();
   renderSources();
   renderRankingRules();
   updateSelectionStatus();
@@ -1696,6 +1910,7 @@ async function init() {
 
     wireInterface();
     render();
+    loadJournalArticles();
   } catch (error) {
     const list = document.getElementById("news-list");
     list.innerHTML = `<div class="empty-state">${error.message}</div>`;
