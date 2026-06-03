@@ -1,20 +1,18 @@
 ﻿{
-    "lastUpdatedUtc":  "2026-06-03T01:33:08.7503433Z",
-    "sourceCount":  13,
-    "itemCount":  2517,
-    "sourcesUsed":  [
-                        "fda",
-                        "nci",
-                        "astrazeneca",
-                        "merck-co",
-                        "pfizer",
-                        "abbvie",
-                        "roche",
-                        "novartis",
-                        "amgen",
-                        "gilead",
-                        "moderna",
-                        "fierce-biotech",
-                        "biopharma-dive"
-                    ]
+  "lastUpdatedUtc": "2026-06-03T18:05:22.8081752Z",
+  "sourceCount": 11,
+  "itemCount": 547,
+  "sourcesUsed": [
+    "nci",
+    "astrazeneca",
+    "merck-co",
+    "pfizer",
+    "abbvie",
+    "roche",
+    "novartis",
+    "amgen",
+    "moderna",
+    "fierce-biotech",
+    "biopharma-dive"
+  ]
 }
