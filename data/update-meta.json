@@ -1,7 +1,7 @@
 ﻿{
-  "lastUpdatedUtc": "2026-06-03T18:05:22.8081752Z",
-  "sourceCount": 11,
-  "itemCount": 547,
+  "lastUpdatedUtc": "2026-06-04T16:30:04.6292412Z",
+  "sourceCount": 12,
+  "itemCount": 2508,
   "sourcesUsed": [
     "nci",
     "astrazeneca",
@@ -11,6 +11,7 @@
     "roche",
     "novartis",
     "amgen",
+    "gilead",
     "moderna",
     "fierce-biotech",
     "biopharma-dive"
