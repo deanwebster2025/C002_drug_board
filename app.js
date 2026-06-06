@@ -1097,16 +1097,6 @@ function sourceGroupRank(source) {
 }
 
 function sortSourceGroups(a, b) {
-  const primarySourceOrder = ["fda", "nih", "astrazeneca"];
-  const aPrimaryIndex = primarySourceOrder.indexOf(a.source.id);
-  const bPrimaryIndex = primarySourceOrder.indexOf(b.source.id);
-
-  if (aPrimaryIndex !== -1 || bPrimaryIndex !== -1) {
-    if (aPrimaryIndex === -1) return 1;
-    if (bPrimaryIndex === -1) return -1;
-    return aPrimaryIndex - bPrimaryIndex;
-  }
-
   const rankDiff = sourceGroupRank(a.source) - sourceGroupRank(b.source);
   if (rankDiff) {
     return rankDiff;
