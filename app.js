@@ -1289,12 +1289,16 @@ function renderBoardPortal(items) {
   tabs.innerHTML = "";
   panels.innerHTML = "";
 
+  const permanentBoardSourceIds = new Set(["fda", "nih"]);
   const orderedSources = state.sources
     .map(source => ({
       source,
       stories: getSourceBoardStories(source.id, items)
     }))
-    .filter(entry => entry.stories.length)
+    .filter(entry =>
+      entry.stories.length ||
+      (state.sourceType === "all" && permanentBoardSourceIds.has(entry.source.id))
+    )
     .sort(sortSourceGroups);
 
   orderedSources.forEach(({ source, stories }, index) => {
@@ -1317,16 +1321,23 @@ function renderBoardPortal(items) {
     panelFragment.querySelector(".portal-window-badge").textContent = getActiveWindowLabel();
 
     const list = panelFragment.querySelector(".portal-story-list");
-    stories.forEach(story => {
-      const item = document.createElement("li");
-      item.id = story.id;
-      item.className = "portal-story-item";
-      item.innerHTML = `
-        <span class="portal-story-date">${escapeHtml(formatDate(story.date))}</span>
-        <a class="portal-story-link" href="${escapeHtml(story.url)}" target="_blank" rel="noreferrer">${escapeHtml(story.headline)}</a>
-      `;
-      list.appendChild(item);
-    });
+    if (stories.length) {
+      stories.forEach(story => {
+        const item = document.createElement("li");
+        item.id = story.id;
+        item.className = "portal-story-item";
+        item.innerHTML = `
+          <span class="portal-story-date">${escapeHtml(formatDate(story.date))}</span>
+          <a class="portal-story-link" href="${escapeHtml(story.url)}" target="_blank" rel="noreferrer">${escapeHtml(story.headline)}</a>
+        `;
+        list.appendChild(item);
+      });
+    } else {
+      const empty = document.createElement("li");
+      empty.className = "empty-state";
+      empty.textContent = `No ${source.name} stories are available for ${getActiveWindowLabel().toLowerCase()}.`;
+      list.appendChild(empty);
+    }
 
     const boardLink = panelFragment.querySelector(".portal-board-link");
     boardLink.href = source.url;
