@@ -62,10 +62,10 @@ function Get-SourceProfile {
     }
   }
 
-  if ($mode -eq "nih-rss" -or ($sourceHost -like "*nih.gov" -and ($path -like "*news-releases*" -or $path -like "*feed*" -or $path -like "*.xml"))) {
+  if ($mode -in @("nih-html", "nih-rss") -or ($sourceHost -like "*nih.gov" -and ($path -like "*news-releases*" -or $path -like "*feed*" -or $path -like "*.xml"))) {
     return @{
-      mode = "nih-rss"
-      feedUrl = "https://www.nih.gov/news-releases/feed.xml"
+      mode = "nih-html"
+      feedUrl = $url
       sourceId = [string]$Source.id
       trustScore = Get-TrustScoreValue $Source.trustScore
     }
@@ -417,18 +417,66 @@ function Get-FdaItemsForSource {
   $html = (Invoke-WebRequest -UseBasicParsing $url).Content
   $matches = [regex]::Matches(
     $html,
-    '<a href="(?<href>/news-events/press-announcements/[^"]+)"><time datetime="(?<date>[^"]+)">[^<]+</time>\s*-\s*(?<title>[^<]+)</a>',
-    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+    '<a href="(?<href>/news-events/press-announcements/[^"]+)"><time datetime="(?<date>[^"]+)">.*?</time>\s*-\s*(?<title>.*?)</a>',
+    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Singleline
   )
 
   $items = @()
   foreach ($match in $matches) {
     $itemUrl = "https://www.fda.gov" + $match.Groups["href"].Value
-    $title = ($match.Groups["title"].Value -replace '\s+', ' ').Trim()
+    $title = [System.Net.WebUtility]::HtmlDecode((($match.Groups["title"].Value -replace '<[^>]+>', '') -replace '\s+', ' ').Trim())
     $published = Get-Date $match.Groups["date"].Value
     $normalized = Normalize-Url $itemUrl
     $existing = $ExistingByUrl[$normalized]
     $summary = "Official FDA press announcement published on $($published.ToString('MMMM d, yyyy'))."
+    $tags = Get-TagsFromTitle -Title $title
+    $signals = Get-Signals -Title $title -TrustScore (Get-TrustScoreValue $Source.trustScore) -PublishedDate $published
+    $id = "story-" + ([System.Guid]::NewGuid().ToString("N").Substring(0, 8))
+
+    $items += New-NewsItem -Id $id -SourceId ([string]$Source.id) -Date $published -Headline $title -Summary $summary -Url $itemUrl -Tags $tags -Signals $signals -Existing $existing
+  }
+
+  return $items
+}
+
+function Get-NihItemsForSource {
+  param(
+    [object]$Source,
+    [hashtable]$ExistingByUrl
+  )
+
+  $sourceUrl = [string]$Source.url
+  if (-not $sourceUrl) {
+    return @()
+  }
+
+  # NIH rejects requests from the Windows GitHub runner, so use a text-only
+  # rendering service while preserving NIH as the source and destination.
+  $proxyUrl = "https://r.jina.ai/http://www.nih.gov/news-events/news-releases"
+  $content = (Invoke-WebRequest -UseBasicParsing $proxyUrl).Content
+  $matches = [regex]::Matches(
+    $content,
+    '###\s*(?<content>.*?)\]\((?<url>https://www\.nih\.gov/news-events/news-releases/[^)]+)\)',
+    [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Singleline
+  )
+
+  $items = @()
+  foreach ($match in $matches) {
+    $entry = (($match.Groups["content"].Value -replace '\s+', ' ').Trim())
+    $parts = [regex]::Match(
+      $entry,
+      '^(?<title>.+?)\s+(?<date>[A-Za-z]+\s+\d{1,2},\s+\d{4})\s+\S+\s+(?<summary>.+)$'
+    )
+    if (-not $parts.Success) {
+      continue
+    }
+
+    $itemUrl = $match.Groups["url"].Value
+    $title = [System.Net.WebUtility]::HtmlDecode($parts.Groups["title"].Value.Trim())
+    $summary = [System.Net.WebUtility]::HtmlDecode($parts.Groups["summary"].Value.Trim())
+    $published = Get-Date $parts.Groups["date"].Value
+    $normalized = Normalize-Url $itemUrl
+    $existing = $ExistingByUrl[$normalized]
     $tags = Get-TagsFromTitle -Title $title
     $signals = Get-Signals -Title $title -TrustScore (Get-TrustScoreValue $Source.trustScore) -PublishedDate $published
     $id = "story-" + ([System.Guid]::NewGuid().ToString("N").Substring(0, 8))
@@ -803,6 +851,7 @@ foreach ($item in $existingNews) {
 
 $freshItems = @()
 $usedSourceIds = New-Object System.Collections.Generic.List[string]
+$failedSourceIds = New-Object System.Collections.Generic.HashSet[string]
 
 foreach ($source in $savedSources) {
   $profile = Get-SourceProfile $source
@@ -811,58 +860,61 @@ foreach ($source in $savedSources) {
   }
 
   try {
+    $sourceItems = @()
     switch ($profile.mode) {
       "fda-html" {
-        $freshItems += Get-FdaItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-FdaItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
-      "nih-rss" {
-        $freshItems += Get-RssItems -FeedUrl $profile.feedUrl -SourceId $profile.sourceId -TrustScore $profile.trustScore -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+      "nih-html" {
+        $sourceItems = @(Get-NihItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "nci-html" {
-        $freshItems += Get-NciItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-NciItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "astrazeneca-json" {
-        $freshItems += Get-AstraZenecaItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-AstraZenecaItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "merck-wp-json" {
-        $freshItems += Get-MerckItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-MerckItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "pfizer-html" {
-        $freshItems += Get-PfizerItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-PfizerItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "abbvie-html" {
-        $freshItems += Get-AbbVieItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-AbbVieItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "roche-storyblok" {
-        $freshItems += Get-RocheItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-RocheItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "novartis-html" {
-        $freshItems += Get-NovartisItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-NovartisItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "amgen-json" {
-        $freshItems += Get-AmgenItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-AmgenItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "gilead-search" {
-        $freshItems += Get-GileadItemsForSource -Source $source -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-GileadItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
       "rss" {
-        $freshItems += Get-RssItems -FeedUrl $profile.feedUrl -SourceId $profile.sourceId -TrustScore $profile.trustScore -ExistingByUrl $existingByUrl
-        $usedSourceIds.Add([string]$source.id)
+        $sourceItems = @(Get-RssItems -FeedUrl $profile.feedUrl -SourceId $profile.sourceId -TrustScore $profile.trustScore -ExistingByUrl $existingByUrl)
       }
     }
+
+    if ($sourceItems.Count -eq 0) {
+      throw "Collector returned no items."
+    }
+
+    $freshItems += $sourceItems
+    $usedSourceIds.Add([string]$source.id)
   } catch {
-    Write-Warning "Skipping source $($source.name): $($_.Exception.Message)"
+    $failedSourceIds.Add([string]$source.id) | Out-Null
+    Write-Warning "Keeping existing stories for $($source.name): $($_.Exception.Message)"
+  }
+}
+
+foreach ($item in $existingNews) {
+  if ($failedSourceIds.Contains([string]$item.sourceId)) {
+    $freshItems += $item
   }
 }
 

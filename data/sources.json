@@ -5,7 +5,9 @@
     "type": "Regulator",
     "trustScore": 10,
     "url": "https://www.fda.gov/news-events/fda-newsroom",
-    "notes": "Best for approvals, regulatory actions, safety updates, and official product milestones."
+    "notes": "Best for approvals, regulatory actions, safety updates, and official product milestones.",
+    "updaterReady": true,
+    "updaterMode": "fda-html"
   },
   {
     "id": "nih",
@@ -13,7 +15,9 @@
     "type": "Research",
     "trustScore": 9,
     "url": "https://www.nih.gov/news-events/news-releases",
-    "notes": "Strong upstream signal for translational science, funded breakthroughs, and trial readouts."
+    "notes": "Strong upstream signal for translational science, funded breakthroughs, and trial readouts.",
+    "updaterReady": true,
+    "updaterMode": "nih-html"
   },
   {
     "id": "clinicaltrials",
