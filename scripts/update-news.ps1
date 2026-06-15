@@ -1,3 +1,7 @@
+param(
+  [string[]]$SourceIds = @()
+)
+
 $ErrorActionPreference = "Stop"
 
 $workspace = Split-Path -Parent $PSScriptRoot
@@ -46,12 +50,49 @@ function Get-SourceProfile {
 
   $url = [string]$Source.url
   $mode = [string]$Source.updaterMode
+  $sourceId = [string]$Source.id
   $sourceHost = Get-HostName $url
   $path = ""
 
   try {
     $path = ([System.Uri]$url).AbsolutePath.ToLowerInvariant()
   } catch {}
+
+  if ($mode -eq "pubmed-api" -or $sourceId -eq "pubmed") {
+    return @{
+      mode = "pubmed-api"
+      feedUrl = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
+      sourceId = $sourceId
+      trustScore = Get-TrustScoreValue $Source.trustScore
+    }
+  }
+
+  if ($sourceId -eq "nature-biotech") {
+    return @{
+      mode = "rss"
+      feedUrl = "https://www.nature.com/nbt.rss"
+      sourceId = $sourceId
+      trustScore = Get-TrustScoreValue $Source.trustScore
+    }
+  }
+
+  if ($sourceId -eq "nature-medicine") {
+    return @{
+      mode = "rss"
+      feedUrl = "https://www.nature.com/nm.rss"
+      sourceId = $sourceId
+      trustScore = Get-TrustScoreValue $Source.trustScore
+    }
+  }
+
+  if ($sourceId -eq "nejm") {
+    return @{
+      mode = "rss"
+      feedUrl = "https://www.nejm.org/action/showFeed?type=etoc&feed=rss&jc=nejm"
+      sourceId = $sourceId
+      trustScore = Get-TrustScoreValue $Source.trustScore
+    }
+  }
 
   if ($mode -eq "fda-html" -or ($sourceHost -like "*fda.gov" -and $path -like "*fda-newsroom*")) {
     return @{
@@ -223,6 +264,22 @@ function Get-XmlNodeText {
   return ([string]$Node).Trim()
 }
 
+function Get-XmlChildText {
+  param(
+    [object]$Node,
+    [string[]]$LocalNames
+  )
+
+  foreach ($localName in $LocalNames) {
+    $child = $Node.SelectSingleNode("./*[local-name()='$localName']")
+    if ($child) {
+      return (Get-XmlNodeText $child)
+    }
+  }
+
+  return ""
+}
+
 function Get-TagsFromTitle {
   param([string]$Title)
   $lower = $Title.ToLowerInvariant()
@@ -352,17 +409,29 @@ function Get-RssItems {
     [hashtable]$ExistingByUrl
   )
 
-  $response = Invoke-WebRequest -UseBasicParsing $FeedUrl
-  $xml = [xml]$response.Content
+  if ($SourceId -eq "nejm") {
+    $content = curl.exe -L --max-time 45 -A "Mozilla/5.0" -sS $FeedUrl
+    if ($LASTEXITCODE -ne 0 -or -not $content) {
+      throw "NEJM feed request failed."
+    }
+    $xml = [xml]$content
+  } else {
+    $response = Invoke-WebRequest -UseBasicParsing $FeedUrl
+    $xml = [xml]$response.Content
+  }
   $items = @()
 
-  foreach ($node in $xml.rss.channel.item) {
-    if (-not $node.link -or -not $node.title) { continue }
-    $url = Get-XmlNodeText $node.link
-    $title = [System.Net.WebUtility]::HtmlDecode((Get-XmlNodeText $node.title))
-    $description = Get-XmlNodeText $node.description
+  $nodes = @($xml.SelectNodes("//*[local-name()='item']"))
+  foreach ($node in $nodes) {
+    $url = Get-XmlChildText -Node $node -LocalNames @("link")
+    $title = [System.Net.WebUtility]::HtmlDecode((Get-XmlChildText -Node $node -LocalNames @("title")))
+    if (-not $url -or -not $title) { continue }
+
+    $description = Get-XmlChildText -Node $node -LocalNames @("description", "encoded")
     $summary = if ($description) { [System.Net.WebUtility]::HtmlDecode((($description -replace '<[^>]+>', '').Trim())) } else { "Recent source update from $SourceId." }
-    $published = Parse-PublishedDate ([string]$node.pubDate)
+    $dateValue = Get-XmlChildText -Node $node -LocalNames @("pubDate", "date")
+    if (-not $dateValue) { continue }
+    $published = Parse-PublishedDate $dateValue
     $normalized = Normalize-Url $url
     $existing = $ExistingByUrl[$normalized]
     $tags = Get-TagsFromTitle -Title $title
@@ -370,6 +439,65 @@ function Get-RssItems {
     $id = "story-" + ([System.Guid]::NewGuid().ToString("N").Substring(0, 8))
 
     $items += New-NewsItem -Id $id -SourceId $SourceId -Date $published -Headline $title.Trim() -Summary $summary -Url $url -Tags $tags -Signals $signals -Existing $existing
+  }
+
+  return $items
+}
+
+function Get-PubMedItemsForSource {
+  param(
+    [object]$Source,
+    [hashtable]$ExistingByUrl
+  )
+
+  $term = [System.Uri]::EscapeDataString('(drug discovery[Title/Abstract] OR drug development[Title/Abstract])')
+  $searchUrl = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=$term&retmode=json&retmax=30&sort=pub+date"
+  $search = Invoke-RestMethod $searchUrl
+  $ids = @($search.esearchresult.idlist)
+  if ($ids.Count -eq 0) {
+    return @()
+  }
+
+  $summaryUrl = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=$($ids -join ',')&retmode=json"
+  $response = Invoke-RestMethod $summaryUrl
+  $items = @()
+
+  foreach ($pubmedId in @($response.result.uids)) {
+    $entry = $response.result.$pubmedId
+    if (-not $entry.title) { continue }
+
+    $dateValue = [string]$entry.epubdate
+    if (-not $dateValue) {
+      $pubmedHistory = @($entry.history | Where-Object { $_.pubstatus -eq "pubmed" } | Select-Object -First 1)
+      if ($pubmedHistory.Count) {
+        $dateValue = [string]$pubmedHistory[0].date
+      }
+    }
+    if (-not $dateValue) {
+      $dateValue = [string]$entry.pubdate
+    }
+
+    try {
+      $published = Get-Date $dateValue
+    } catch {
+      continue
+    }
+
+    $itemUrl = "https://pubmed.ncbi.nlm.nih.gov/$pubmedId/"
+    $title = [System.Net.WebUtility]::HtmlDecode(([string]$entry.title).Trim())
+    $journal = [string]$entry.fulljournalname
+    $summary = if ($journal) {
+      "PubMed-indexed article published in $journal."
+    } else {
+      "Recent PubMed-indexed drug discovery article."
+    }
+    $normalized = Normalize-Url $itemUrl
+    $existing = $ExistingByUrl[$normalized]
+    $tags = Get-TagsFromTitle -Title $title
+    $signals = Get-Signals -Title $title -TrustScore (Get-TrustScoreValue $Source.trustScore) -PublishedDate $published
+    $id = "story-" + ([System.Guid]::NewGuid().ToString("N").Substring(0, 8))
+
+    $items += New-NewsItem -Id $id -SourceId ([string]$Source.id) -Date $published -Headline $title -Summary $summary -Url $itemUrl -Tags $tags -Signals $signals -Existing $existing
   }
 
   return $items
@@ -854,6 +982,10 @@ $usedSourceIds = New-Object System.Collections.Generic.List[string]
 $failedSourceIds = New-Object System.Collections.Generic.HashSet[string]
 
 foreach ($source in $savedSources) {
+  if ($SourceIds.Count -gt 0 -and [string]$source.id -notin $SourceIds) {
+    continue
+  }
+
   $profile = Get-SourceProfile $source
   if ($null -eq $profile) {
     continue
@@ -895,6 +1027,9 @@ foreach ($source in $savedSources) {
       "gilead-search" {
         $sourceItems = @(Get-GileadItemsForSource -Source $source -ExistingByUrl $existingByUrl)
       }
+      "pubmed-api" {
+        $sourceItems = @(Get-PubMedItemsForSource -Source $source -ExistingByUrl $existingByUrl)
+      }
       "rss" {
         $sourceItems = @(Get-RssItems -FeedUrl $profile.feedUrl -SourceId $profile.sourceId -TrustScore $profile.trustScore -ExistingByUrl $existingByUrl)
       }
@@ -913,7 +1048,8 @@ foreach ($source in $savedSources) {
 }
 
 foreach ($item in $existingNews) {
-  if ($failedSourceIds.Contains([string]$item.sourceId)) {
+  $isUntargeted = $SourceIds.Count -gt 0 -and [string]$item.sourceId -notin $SourceIds
+  if ($isUntargeted -or $failedSourceIds.Contains([string]$item.sourceId)) {
     $freshItems += $item
   }
 }

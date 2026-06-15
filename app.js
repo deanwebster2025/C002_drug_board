@@ -1081,7 +1081,7 @@ function newestStoryTime(stories) {
 function sourceGroupRank(source) {
   const type = (source.type || "").toLowerCase();
 
-  if (["regulator", "research", "clinical trials", "journals"].includes(type)) {
+  if (["regulator", "research", "clinical trials"].includes(type)) {
     return 1;
   }
 
@@ -1093,7 +1093,11 @@ function sourceGroupRank(source) {
     return 3;
   }
 
-  return 4;
+  if (type === "journals") {
+    return 4;
+  }
+
+  return 5;
 }
 
 function sortSourceGroups(a, b) {
@@ -1135,8 +1139,40 @@ function journalContainerMatches(work, journalName) {
 }
 
 async function fetchJournalArticles(journal) {
-  const endpoint = new URL("https://api.crossref.org/works");
   const fromDate = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+  const openAlexEndpoint = new URL("https://api.openalex.org/works");
+  openAlexEndpoint.searchParams.set("filter", `primary_location.source.issn:${journal.issn},from_publication_date:${fromDate}`);
+  openAlexEndpoint.searchParams.set("sort", "publication_date:desc");
+  openAlexEndpoint.searchParams.set("per-page", "5");
+  openAlexEndpoint.searchParams.set("select", "id,doi,title,publication_date,primary_location");
+  openAlexEndpoint.searchParams.set("mailto", "deanwebster2025@gmail.com");
+
+  const openAlexController = new AbortController();
+  const openAlexTimeout = window.setTimeout(() => openAlexController.abort(), 12000);
+
+  try {
+    const response = await fetch(openAlexEndpoint, { signal: openAlexController.signal });
+    if (!response.ok) {
+      throw new Error(`OpenAlex returned ${response.status}`);
+    }
+
+    const data = await response.json();
+    const works = data?.results ?? [];
+    if (works.length) {
+      return works.map(work => ({
+        title: work.title?.replace(/\s+/g, " ").trim() || "Untitled article",
+        date: work.publication_date || "",
+        url: work.primary_location?.landing_page_url || work.doi || journal.url,
+        container: work.primary_location?.source?.display_name || journal.name
+      }));
+    }
+  } catch {
+    // Crossref remains a useful fallback when OpenAlex is temporarily unavailable.
+  } finally {
+    window.clearTimeout(openAlexTimeout);
+  }
+
+  const endpoint = new URL("https://api.crossref.org/works");
   endpoint.searchParams.set("filter", `issn:${journal.issn},type:journal-article,from-pub-date:${fromDate}`);
   endpoint.searchParams.set("sort", "published");
   endpoint.searchParams.set("order", "desc");
@@ -1168,6 +1204,41 @@ async function fetchJournalArticles(journal) {
   }
 }
 
+async function mapWithConcurrency(items, limit, mapper) {
+  const results = new Array(items.length);
+  let nextIndex = 0;
+
+  async function worker() {
+    while (nextIndex < items.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      results[index] = await mapper(items[index], index);
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return results;
+}
+
+function insertJournalBoardInSourceOrder(tabs, panels, tabFragment, panel) {
+  const journalSource = { id: "journal-articles", name: "Journals", type: "Journals" };
+  const sourceButtons = [...tabs.querySelectorAll(".portal-tab-button[data-source-id]")];
+  const nextButton = sourceButtons.find(button => {
+    const source = state.sources.find(item => item.id === button.dataset.sourceId);
+    return source && sortSourceGroups({ source: journalSource }, { source }) < 0;
+  });
+
+  if (!nextButton) {
+    tabs.appendChild(tabFragment);
+    panels.appendChild(panel);
+    return;
+  }
+
+  const nextPanel = panels.querySelector(`#${nextButton.dataset.target}`);
+  tabs.insertBefore(tabFragment, nextButton);
+  panels.insertBefore(panel, nextPanel);
+}
+
 function renderJournalBoard() {
   const tabs = document.getElementById("portal-tabs");
   const panels = document.getElementById("portal-tab-panels");
@@ -1186,7 +1257,7 @@ function renderJournalBoard() {
 
   const tabFragment = tabTemplate.content.cloneNode(true);
   const tabButton = tabFragment.querySelector(".portal-tab-button");
-  tabButton.textContent = "Journal articles";
+  tabButton.textContent = "Journals";
   tabButton.dataset.target = "journal-panel";
 
   const panel = document.createElement("article");
@@ -1250,8 +1321,7 @@ function renderJournalBoard() {
     panel.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
-  tabs.appendChild(tabFragment);
-  panels.appendChild(panel);
+  insertJournalBoardInSourceOrder(tabs, panels, tabFragment, panel);
 }
 async function loadJournalArticles() {
   const container = document.getElementById("portal-tab-panels");
@@ -1263,14 +1333,14 @@ async function loadJournalArticles() {
   state.journalArticleGroups = journalBoardConfig.map(journal => ({ journal, articles: [], status: "loading" }));
   renderJournalBoard();
 
-  const groups = await Promise.all(journalBoardConfig.map(async journal => {
+  const groups = await mapWithConcurrency(journalBoardConfig, 4, async journal => {
     try {
       const articles = await fetchJournalArticles(journal);
       return { journal, articles, status: articles.length ? "ready" : "empty" };
     } catch {
       return { journal, articles: [], status: "error" };
     }
-  }));
+  });
 
   state.journalArticleGroups = groups.sort((a, b) => a.journal.rank - b.journal.rank);
   state.journalArticlesLoading = false;
@@ -1296,8 +1366,11 @@ function renderBoardPortal(items) {
       stories: getSourceBoardStories(source.id, items)
     }))
     .filter(entry =>
-      entry.stories.length ||
-      (state.sourceType === "all" && permanentBoardSourceIds.has(entry.source.id))
+      (entry.source.type || "").toLowerCase() !== "journals" &&
+      (
+        entry.stories.length ||
+        (state.sourceType === "all" && permanentBoardSourceIds.has(entry.source.id))
+      )
     )
     .sort(sortSourceGroups);
 
@@ -1309,6 +1382,7 @@ function renderBoardPortal(items) {
     const tabButton = tabFragment.querySelector(".portal-tab-button");
     tabButton.textContent = source.name;
     tabButton.dataset.target = panelId;
+    tabButton.dataset.sourceId = source.id;
     if (index === 0) {
       tabButton.classList.add("active");
     }
@@ -1425,7 +1499,10 @@ function renderWorkspacePortal(items) {
       source,
       stories: getWorkspaceSourceStories(source.id, items)
     }))
-    .filter(entry => entry.stories.length)
+    .filter(entry =>
+      (entry.source.type || "").toLowerCase() !== "journals" &&
+      entry.stories.length
+    )
     .sort(sortSourceGroups);
 
   if (!orderedSources.length) {
@@ -1444,6 +1521,7 @@ function renderWorkspacePortal(items) {
     const tabButton = tabFragment.querySelector(".portal-tab-button");
     tabButton.textContent = source.name;
     tabButton.dataset.target = panelId;
+    tabButton.dataset.sourceId = source.id;
     if (index === 0) {
       tabButton.classList.add("active");
     }

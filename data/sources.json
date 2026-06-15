@@ -33,7 +33,9 @@
     "type": "Journals",
     "trustScore": 8,
     "url": "https://pubmed.ncbi.nlm.nih.gov/",
-    "notes": "Primary literature layer for discovery papers and preclinical or clinical publications."
+    "notes": "Primary literature layer for discovery papers and preclinical or clinical publications.",
+    "updaterReady": true,
+    "updaterMode": "pubmed-api"
   },
   {
     "id": "nature-biotech",
@@ -41,7 +43,9 @@
     "type": "Journals",
     "trustScore": 8,
     "url": "https://www.nature.com/nbt/",
-    "notes": "High-value journal source for platform innovation, modalities, and translational work."
+    "notes": "High-value journal source for platform innovation, modalities, and translational work.",
+    "updaterReady": true,
+    "updaterMode": "rss"
   },
   {
     "id": "nature-medicine",
@@ -49,7 +53,9 @@
     "type": "Journals",
     "trustScore": 8,
     "url": "https://www.nature.com/nm/",
-    "notes": "Useful for translational and clinical medicine developments with strong scientific signal."
+    "notes": "Useful for translational and clinical medicine developments with strong scientific signal.",
+    "updaterReady": true,
+    "updaterMode": "rss"
   },
   {
     "id": "nejm",
@@ -57,7 +63,9 @@
     "type": "Journals",
     "trustScore": 8,
     "url": "https://www.nejm.org/",
-    "notes": "Strong source for clinical practice-changing studies and trial publications."
+    "notes": "Strong source for clinical practice-changing studies and trial publications.",
+    "updaterReady": true,
+    "updaterMode": "rss"
   },
   {
     "id": "ema",
