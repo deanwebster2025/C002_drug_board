@@ -1,11 +1,13 @@
 ﻿{
-  "lastUpdatedUtc": "2026-07-22T15:17:27.5486457Z",
-  "sourceCount": 13,
-  "itemCount": 2656,
+  "lastUpdatedUtc": "2026-07-23T15:24:19.2712566Z",
+  "sourceCount": 15,
+  "itemCount": 2650,
   "sourcesUsed": [
+    "nih",
     "pubmed",
     "nature-biotech",
     "nature-medicine",
+    "nejm",
     "astrazeneca",
     "merck-co",
     "pfizer",
