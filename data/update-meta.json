@@ -1,7 +1,7 @@
 ﻿{
-  "lastUpdatedUtc": "2026-10-25T17:03:17.0680416Z",
-  "sourceCount": 11,
-  "itemCount": 2674,
+  "lastUpdatedUtc": "2026-10-26T19:17:16.6120306Z",
+  "sourceCount": 12,
+  "itemCount": 2677,
   "sourcesUsed": [
     "pubmed",
     "nature-biotech",
@@ -11,6 +11,7 @@
     "merck-co",
     "abbvie",
     "roche",
+    "amgen",
     "moderna",
     "fierce-biotech",
     "biopharma-dive"
